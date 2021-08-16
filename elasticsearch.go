@@ -33,7 +33,7 @@ func (r *Elasticsearch) XClient(ctxPtr *context.Context, config elasticsearch.Co
 }
 
 // Set the document for the given index name.
-func (c *Client) Set(index string, docId string, document map[string]interface{}, ) {
+func (c *Client) AddDocument(index string, docId string, document map[string]interface{}, ) {
     go func() {
         doc, err := json.Marshal(document)
         if err != nil {
