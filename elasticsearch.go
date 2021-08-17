@@ -2,7 +2,6 @@ package elasticsearch
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	_ "fmt"
 	"github.com/olivere/elastic/v7"
@@ -46,14 +45,7 @@ func (r *Elasticsearch) XClient(ctxPtr *context.Context, username string, passwo
 
 // Set the document for the given index name.
 func (c *Client) AddDocument(index string, docId string, document string) {
-	elasticDoc := make(map[string]interface{})
-
-	err := json.Unmarshal([]byte(document), &elasticDoc)
-	if err != nil {
-		log.Fatalf("Failed to parse document %s", err)
-	}
-
-	r, err := c.client.Index().Index(index).Id(docId).BodyJson(elasticDoc).Do(context.Background())
+	r, err := c.client.Index().Index(index).Id(docId).BodyJson(document).Do(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to index document %s", err)
 	}
