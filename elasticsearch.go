@@ -14,11 +14,6 @@ func init() {
 	modules.Register("k6/x/elasticsearch", new(Elasticsearch))
 }
 
-// Json Fields
-type ElasticDoc struct {
-	Doc map[string]interface{} `json:"-"` // Rest of the fields should go here.
-}
-
 // Elasticsearch is the k6 extension for a Elasticsearch client.
 type Elasticsearch struct{}
 
@@ -45,7 +40,6 @@ func (r *Elasticsearch) XClient(ctxPtr *context.Context, username string, passwo
 
 // Set the document for the given index name.
 func (c *Client) AddDocument(index string, docId string, document interface{}) {
-	fmt.Printf("Index: %s, docId: %s, %s", index, docId, document);
 	r, err := c.client.Index().Index(index).Id(docId).BodyJson(document).Do(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to index document %s", err)
