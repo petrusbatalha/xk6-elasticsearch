@@ -38,6 +38,7 @@ func (r *Elasticsearch) XClient(ctxPtr *context.Context, username string, passwo
 	return common.Bind(rt, &Client{client: client}, ctxPtr)
 }
 
+// Add document to index, with auto-generated ID.
 func (c *Client) AddDocument(index string, document interface{})  {
 	res, err := c.client.Index().Index(index).BodyJson(document).Do(context.Background())
 	if err != nil {
@@ -46,7 +47,7 @@ func (c *Client) AddDocument(index string, document interface{})  {
 	log.Printf("res %s", res.Result)
 }
 
-// Set the document for the given index name.
+// Add document to index with the given ID.
 func (c *Client) AddDocumentWithID(index string, docId string, document interface{}) {
 	res, err := c.client.Index().Index(index).Id(docId).BodyJson(document).Do(context.Background())
 	if err != nil {
