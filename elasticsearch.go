@@ -46,7 +46,8 @@ func (r *Elasticsearch) XClient(ctxPtr *context.Context, username string, passwo
 
 // Set the document for the given index name.
 func (c *Client) AddDocument(index string, docId string, document string) {
-	elasticDoc := ElasticDoc{}
+	elasticDoc := make(map[string]interface{})
+
 	err := json.Unmarshal([]byte(document), &elasticDoc)
 	if err != nil {
 		log.Fatalf("Failed to parse document %s", err)
