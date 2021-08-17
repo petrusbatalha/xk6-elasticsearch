@@ -39,16 +39,18 @@ func (r *Elasticsearch) XClient(ctxPtr *context.Context, username string, passwo
 }
 
 func (c *Client) AddDocument(index string, document interface{})  {
-	_, err := c.client.Index().Index(index).BodyJson(document).Do(context.Background())
+	res, err := c.client.Index().Index(index).BodyJson(document).Do(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to index document %s", err)
 	}
+	log.Printf("res %s", res.Result)
 }
 
 // Set the document for the given index name.
 func (c *Client) AddDocumentWithID(index string, docId string, document interface{}) {
-	_, err := c.client.Index().Index(index).Id(docId).BodyJson(document).Do(context.Background())
+	res, err := c.client.Index().Index(index).Id(docId).BodyJson(document).Do(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to index document %s", err)
 	}
+	log.Printf("res %s", res.Result)
 }
