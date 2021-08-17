@@ -28,8 +28,7 @@ type Client struct {
 	client *elastic.Client
 }
 
-// XClient represents the Client constructor (i.e. `new redis.Client()`) and
-// returns a new Redis client object.
+// XClient represents the Client constructor returns a new Elasticsearch client object.
 func (r *Elasticsearch) XClient(ctxPtr *context.Context, username string, password string, url string) interface{} {
 	var client, err = elastic.NewClient(
 		elastic.SetSniff(false),
@@ -38,7 +37,7 @@ func (r *Elasticsearch) XClient(ctxPtr *context.Context, username string, passwo
 
 	if err != nil {
 		fmt.Printf("elastic.NewClient() ERROR: %v\n", err)
-		panic("Stop tests..")
+		log.Fatalf("quiting connection..")
 	}
 
 	rt := common.GetRuntime(*ctxPtr)
@@ -46,8 +45,9 @@ func (r *Elasticsearch) XClient(ctxPtr *context.Context, username string, passwo
 }
 
 // Set the document for the given index name.
-func (c *Client) AddDocument(index string, docId string, document map[string]interface{}) {
-	elasticDoc, err := json.Marshal(document)
+func (c *Client) AddDocument(index string, docId string, document string) {
+	elasticDoc := ElasticDoc{}
+	err := json.Unmarshal([]byte(document), &elasticDoc)
 	if err != nil {
 		log.Fatalf("Failed to parse document %s", err)
 	}
@@ -56,6 +56,5 @@ func (c *Client) AddDocument(index string, docId string, document map[string]int
 	if err != nil {
 		log.Fatalf("Failed to index document %s", err)
 	}
-
 	fmt.Printf("Doc response %s", r.Result)
 }
