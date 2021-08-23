@@ -26,6 +26,7 @@ type Client struct {
 func (r *Elasticsearch) XClient(ctxPtr *context.Context, username string, password string, url string) interface{} {
 	var client, err = elastic.NewClient(
 		elastic.SetSniff(false),
+		elastic.SetHealthcheck(false),
 		elastic.SetURL(url),
 		elastic.SetBasicAuth(username, password))
 
